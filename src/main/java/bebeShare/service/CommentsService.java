@@ -1,6 +1,5 @@
 package bebeShare.service;
 
-import bebeShare.domain.comment.Comment;
 import bebeShare.domain.comment.CommentRepository;
 import bebeShare.domain.product.Product;
 import bebeShare.domain.product.ProductRepository;
@@ -9,8 +8,6 @@ import bebeShare.domain.user.UserRepository;
 import bebeShare.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service

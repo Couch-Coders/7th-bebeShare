@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
-public class CategoryController {
+public class CategoryApiController {
     private final CategoryService categoryService;
 
     @GetMapping("/categories")

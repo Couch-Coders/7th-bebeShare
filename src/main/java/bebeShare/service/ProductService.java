@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,5 +50,11 @@ public class ProductService {
         entity.update( params.getUser(), params.getProductName(), params.getProductContent(), params.getProductCategory(),
                 params.getProductImage1(), params.getProductImage2(), params.getProductImage3(), params.getDeleteYn(), params.getProductStatus());
         return id;
+    }
+
+    // 상품 게시글 삭제
+    @DeleteMapping("/products/{productId}")
+    public void delete(@PathVariable Long id){
+        productRepository.deleteById(id);
     }
 }
