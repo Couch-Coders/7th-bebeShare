@@ -3,7 +3,7 @@
 
 ### Java ###
 # Compiled class file
-*.class
+*.class 
 out/
 InitClass.java
 .idea
