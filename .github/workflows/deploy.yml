@@ -22,10 +22,8 @@ jobs:
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: 5fcb9b2b-db25-41f5-80b1-c1da5f3fbd1d
-          heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+          heroku_app_name: bebeshare-deploy
           heroku_email: blood_nail@naver.com
-
-
 
 
 

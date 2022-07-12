@@ -24,8 +24,7 @@ public class Code extends BaseEntity {
     private String useYn;
 
     @Builder
-    public Code(Long id, String code, String codeName, String useYn) {
-        this.id = id;
+    public Code(String code, String codeName, String useYn) {
         this.code = code;
         this.codeName = codeName;
         this.useYn = useYn;

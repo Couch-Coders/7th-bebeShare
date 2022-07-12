@@ -1,4 +1,5 @@
-package bebeShare.web.dto.userDto;
+package bebeShare.web.dto.userDto.dto;
+
 
 import bebeShare.domain.common.entity.PageEntity;
 import lombok.Getter;

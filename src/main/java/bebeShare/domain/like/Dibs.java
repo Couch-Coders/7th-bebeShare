@@ -4,13 +4,16 @@ package bebeShare.domain.like;
 import bebeShare.BaseEntity;
 import bebeShare.domain.product.Product;
 import bebeShare.domain.user.User;
+import bebeShare.web.dto.likeDto.SaveLikeDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @Entity
 public class Dibs extends BaseEntity {
@@ -36,7 +39,8 @@ public class Dibs extends BaseEntity {
         this.product = product;
     }
 
-    public void addUserAndProduct(User user , Product product){
+
+    public void addLike(SaveLikeDto saveLikeDto) {
         this.user =  user;
         this.product = product;
     }

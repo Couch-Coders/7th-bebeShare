@@ -1,12 +1,10 @@
 package bebeShare.domain.common.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class PageEntity {
 
-    private int page;
-    private int size;
+    private int page = 0;
+    private int size = 9;
 }

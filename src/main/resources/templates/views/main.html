@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+
+    <style th:inline="css">
+        .float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 40px;
+            right: 40px;
+            background-color: orange;
+            color: white;
+            border-radius: 50px;
+            text-align: center;
+            box-shadow: 2px 2px 3px #999;
+        }
+
+        .my-float {
+            margin-top: 22px;
+        }
+
+        .card-img-top {
+            height: 200px;
+            width: 100%;
+        }
+
+        .btn-link {
+            color: #dc3545;
+        }
+
+        .btn btn-link {
+            color: #e6dbb9;
+        }
+
+
+        .btn-outline-secondary {
+            color: black;
+            border-color: black;
+        }
+    </style>
+    <script th:inline="javascript">
+
+
+        $(function () {
+            selProducts();
+            selCodes();
+
+            $('#searchBtn').on('click', function (e) {
+                selProducts();
+            });
+
+            $("#productName").keydown(function (key) {
+
+                if (key.keyCode == 13) {//키가 13이면 실행 (엔터는 13)
+                    selProducts();
+                }
+
+            });
+
+
+        });
+
+
+        function selCodes() {
+
+            const p_trans = {};
+            let cHtml = '';
+            p_trans.code = "100";
+
+            $.ajax({
+                dataType: 'json',
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                url: '/api/v1/categories',
+                data: JSON.stringify(p_trans),
+                success: function (data) {
+                    console.log("카테고리리스트:{}", data);
+                    const categories = data;
+
+                    for (var i = 0; i < categories.length; i++) {
+                        cHtml += '<div class="col-md-2">';
+                        cHtml += '<button type="button" codeCt="' + categories[i].code + '" class="btn btn-outline-secondary rounded-pill">' + categories[i].codeName + '</button>';
+                        cHtml += '</div>';
+
+                    }
+
+                    $('#categories').html(cHtml);
+
+
+                    $('.rounded-pill').click(function () {
+                            if($(this).hasClass('active')){ // 엑티브된 카테고리 다시눌럿을때 해제
+                                $(this).css('color', 'black');
+                                $(this).css('border-color', 'black');
+                                $(this).css('background-color', 'white');
+                                $(this).removeClass("active");
+                                return;
+                            }
+
+                            $('.col-md-2 button').css('color', 'black');
+                            $('.col-md-2 button').css('border-color', 'black');
+                            $('.col-md-2 button').css('background-color', 'white');
+                            $('.col-md-2 button').removeClass("active");
+
+                            $(this).css('color', 'white');
+                            $(this).addClass('active');
+                            $(this).attr('id', 'activeCode');
+
+                            selProducts();
+                        }
+                    );
+                },
+                error: function (e) {
+                    console.log(e.message);
+                }
+            });
+
+        }
+
+        function selProducts() {
+            $('#products').empty();
+
+            const p_trans = {};
+            let pHtml = '';
+            p_trans.productName = $("#productName").val();
+            p_trans.ordeyBy = $('#ordeyBy').val();
+            p_trans.categoryCode = $('#activeCode').attr('codeCt') == undefined ? '' : $('#activeCode').attr('codeCt');
+
+
+            $.ajax({
+                dataType: 'json',
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                url: '/api/v1/products',
+                data: JSON.stringify(p_trans),
+                success: function (data) {
+                    console.log("상품리스트:{}", data);
+                    const products = data.content;
+
+                    for (var i = 0; i < products.length; i++) {
+                        let likeYn = products[i].dibsId > 0 ? 'bi-heart-fill' : 'bi-heart'
+
+
+                        pHtml += '<div class="col-md-4"  onclick="productDetail('+ products[i].productId+')">';
+                        pHtml += '  <div class="card">';
+                        pHtml += '      <img class="card-img-top" src="/' + products[i].productImage1 + '" alt="Card image cap" >';
+                        pHtml += '          <div class="card-body">';
+                        pHtml += '              <h5 class="card-title">' + products[i].productName + '</h5>';
+                        pHtml += '              <div class="d-flex justify-content-between ">';
+                        pHtml += '                  <p class="card-text"><small class="text-muted">' + products[i].insertDt + '</small>';
+                        pHtml += '                  <button type="button" class="btn btn-link" id="like">';
+                        pHtml += '                  <i class="' + likeYn + '" id="' + products[i].productId + '" likeId="'+products[i].dibsId+'"></i>';
+                        pHtml += '                  </button>';
+                        pHtml += '              </div>';
+                        pHtml += '          </div>';
+                        pHtml += '  </div>';
+                        pHtml += '</div>';
+                    }
+
+
+                    $('#products').html(pHtml);
+
+                    $('.card-text button i').click(function () { //좋아요 버튼 누를 시 이벤트 동작
+                        console.log($(this).attr('like'))
+                            if ($(this).attr('likeId') != 0) {
+                                $(this).attr('class', 'bi-heart');
+                                deleteLike($(this).attr("likeId"));
+
+                                return 0;
+                            }
+                            $(this).attr('class', 'bi-heart-fill');
+                            addLike($(this).attr("id"));
+                        }
+                    );
+
+                    if(!localStorage.getItem("username")){ // 비로그인시 좋아요와 등록버튼은 숨긴다 .
+                        $('.float').hide();
+                        $("i").hide();
+                    }
+
+                },
+                error: function (e) {
+                    console.log(e.message);
+                }
+            });
+        }
+
+        function addProducts() {
+            const p_trans = {};
+            let pHtml = '';
+            p_trans.productName = $("#productName").val();
+            p_trans.ordeyBy = $('#ordeyBy').val();
+            p_trans.categoryCode = $('#activeCode').attr('codeCt') == undefined ? '' : $('#activeCode').attr('codeCt');
+            p_trans.page = $('.col-md-4').length +1;
+            p_trans.size = 9;
+
+            $.ajax({
+                dataType: 'json',
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                url: '/api/v1/products',
+                data: JSON.stringify(p_trans),
+                success: function (data) {
+                    console.log("상품리스트:{}", data);
+                    const products = data.content;
+
+                    for (var i = 0; i < products.length; i++) {
+                        let likeYn = products[i].dibsId > 0 ? 'bi-heart-fill' : 'bi-heart'
+                        pHtml += '<div class="col-md-4"  onclick="productDetail('+ products[i].productId+')">';
+                        pHtml += '  <div class="card">';
+                        pHtml += '      <img class="card-img-top" src="' + products[i].productImage1 + '" alt="Card image cap" >';
+                        pHtml += '          <div class="card-body">';
+                        pHtml += '              <h5 class="card-title">' + products[i].productName + '</h5>';
+                        pHtml += '              <div class="d-flex justify-content-between ">';
+                        pHtml += '                  <p class="card-text"><small class="text-muted">' + products[i].insertDt + '</small>';
+                        pHtml += '                  <button type="button" class="btn btn-link" id="like">';
+                        pHtml += '                  <i class="' + likeYn + '" id="' + products[i].productId + '" likeId="'+products[i].dibsId+'"></i>';
+                        pHtml += '                  </button>';
+                        pHtml += '              </div>';
+                        pHtml += '          </div>';
+                        pHtml += '  </div>';
+                        pHtml += '</div>';
+                    }
+                    $('#products').append(pHtml);
+
+                    $('.card-text button i').click(function () {
+                            console.log($(this).attr('like'))
+                            if ($(this).attr('likeId') != 0) {
+                                $(this).attr('class', 'bi-heart');
+                                deleteLike($(this).attr("likeId"));
+
+                                return 0;
+                            }
+                            $(this).attr('class', 'bi-heart-fill');
+                            addLike($(this).attr("id"));
+                        }
+                    );
+                },
+                error: function (e) {
+                    console.log(e.message);
+                }
+            });
+        }
+
+
+        function addLike(productId) {
+
+            $.ajax({
+                type: 'POST',
+                url: '/api/v1/like/' + productId,
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8'
+            }).done(function () {
+                alert('좋아요가 등록 되었습니다.');
+
+            }).fail(function (error) {
+                alert(JSON.stringify(error));
+            });
+        }
+
+        function deleteLike(likeId) {
+            $.ajax({
+                type: 'DELETE',
+                url: '/api/v1/like/' + likeId,
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8'
+            }).done(function () {
+                alert('좋아요가 해제 되었습니다.');
+            }).fail(function (error) {
+                alert(JSON.stringify(error));
+            });
+        }
+
+        function productDetail(id) {
+            location.href = '/product/detail/'+id
+        }
+    </script>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>배배쉐어</title>
+
+
+</head>
+
+<th:block layout:fragment="content">
+
+    <!-- navbar -->
+    <div class="container p-5">
+        <!-- search bar with search icon in search bar-->
+        <div class="d-flex justify-content-center">
+            <div class="col-md-12">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="검색어를 입력하세요" id="productName">
+                    <div class="input-group-append" id="searchBtn">
+                        <button class="btn btn-outline-secondary" type="button"><i class="bi bi-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- search option 최신순, 오래된 순-->
+        <div class="d-flex justify-content-center">
+            <div class="col-md-12">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="ordeyBy">정렬</label>
+                    </div>
+                    <select class="custom-select" id="ordeyBy">
+                        <option selected value="desc">최신순</option>
+                        <option value="asc">오래된 순</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <!-- tag floating buttons -->
+        <div class="row d-flex justify-content-center">
+            <!-- 왼쪽 여백 -->
+            <div class="row col-md-12 justify-content-start" id="categories">
+
+            </div>
+            <!-- 태그 버튼 -->
+        </div>
+        <!-- 카드 리스트 -->
+        <div class="row d-flex justify-content-center" style="margin-top: 20px;">
+            <div class="col-md-12">
+                <div class="row" id="products">
+
+                </div>
+            </div>
+        </div>
+        <!-- 카드 리스트 -->
+        <div class="row d-flex justify-content-center">
+            <button type="button" class="btn btn-link" onclick="addProducts()">더보기</button>
+        </div>
+        <!-- add button-->
+    </div>
+    <a href="/product/register" class="float">
+        <i class="fa fa-plus my-float"></i>
+    </a>
+    <!--- floating button -->
+    </div>
+
+</th:block>
+</html>

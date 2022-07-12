@@ -7,24 +7,33 @@ spring:
 
   # DB
   datasource:
+#    url: jdbc:h2:tcp://localhost/~/bebeShare
+#    driver-class-name: org.h2.Driver
+#    username: sa
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://211.105.66.96:3306/bebeShare
     username: bebeShare
     password: fW1*n[IQQM
   # JPA
   jpa:
+    generate-ddl: true
     show-sql: true
     hibernate:
       format_sql: true
       ddl-auto: create
-    database-platform: org.hibernate.dialect.MariaDBDialect
-
+#    database-platform: org.hibernate.dialect.MariaDBDialect
   #REDIS
   redis:
-    host: 127.0.0.1
-    port: 6379
+    host: ec2-18-205-76-248.compute-1.amazonaws.com
+    port: 26500
+    password: pae39b99f39db2c0e45ff88155be2bfd0445aa604c574ce084b84baf3b12e436d
+    url: rediss://:pae39b99f39db2c0e45ff88155be2bfd0445aa604c574ce084b84baf3b12e436d@ec2-18-205-76-248.compute-1.amazonaws.com:26500
+    tls: true
     session:
       store-type: redis
       redis:
         flush-mode: on_save
+
+
+
 

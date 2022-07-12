@@ -1,0 +1,40 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    </head>
+
+<script th:inline="javascript">
+
+</script>
+<footer th:fragment="headerFragment">
+
+    <div class="row" style="margin-top: 50px; margin-bottom: 50px;">
+        <div class="col-md-5"></div>
+        <div class="col-md-2">
+            <a style="text-decoration:none; color: black;" href="/">
+                <h2 style="padding-left: 130px;">베베쉐어</h2>
+            </a>
+        </div>
+        <div class="col-md-2"></div>
+        <!-- 로그인 버튼 d-none을 없애면 표시된다 -->
+        <div class="col-md-2 d-none" id="login">
+            <a href="/oauth2/authorization/google" class="btn btn-success active" role="button">Google Login</a>
+        </div>
+        <!-- 로그인 버튼 -->
+        <!--- 프로필 이미지 -->
+
+        <div class="col-md-3" id="profile">
+            <span id="userName"></span>
+            <a class="btn btn-link" href="/user/mypage">
+                <img id="uPicture" class="rounded-circle w-50 h-50" alt="100x100"
+                     data-holder-rendered="true">
+            </a>
+            <a id="logout" href="/logout" class="btn btn-danger" role="button">Logout</a>
+        </div>
+    </div>
+</footer>
+</html>
+

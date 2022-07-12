@@ -10,7 +10,7 @@ import java.io.Serializable;
 @ToString
 @Getter
 @RequiredArgsConstructor
-public class SessionUser implements Serializable {
+public class SessionUser extends User implements Serializable {
 
     private Long id;
     private String name;

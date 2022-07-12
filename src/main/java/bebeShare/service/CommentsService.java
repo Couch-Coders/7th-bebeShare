@@ -10,6 +10,8 @@ import bebeShare.exception.CustomException;
 import bebeShare.exception.ErrorCode;
 import bebeShare.web.dto.commentDto.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,21 +48,31 @@ public class CommentsService {
     }
 
     @Transactional
-    public CommentUpdateResponseDto update(Long productId, Long commentId, CommentUpdateRequestsDto updateRequestsDto) {
-        Comment entity = commentRepository.findById(commentId).orElseThrow(
+    public CommentUpdateResponseDto update(CommentUpdateRequestsDto updateRequestsDto) {
+        Comment entity = commentRepository.findById(updateRequestsDto.getCommentId()).orElseThrow(
                 () -> new CustomException(ErrorCode.INTERNAL_SERVER_ERROR)
         );
-        entity.update(commentId, updateRequestsDto);
-        return new CommentUpdateResponseDto(productId);
+        entity.update(updateRequestsDto);
+        return new CommentUpdateResponseDto(updateRequestsDto.getCommentId());
     }
 
     @Transactional
-    public CommentDeleteResponseDto delete(Long productId, Long commentId, CommentDeleteRequestDto params) {
-        Comment entity = commentRepository.findById(commentId).orElseThrow(()
+    public CommentDeleteResponseDto delete(CommentDeleteRequestDto params) {
+        Comment entity = commentRepository.findById(params.getCommentId()).orElseThrow(()
                 -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
-        entity.delete(params);
-        return new CommentDeleteResponseDto(productId);
+        entity.delete();
+        return new CommentDeleteResponseDto(params.getCommentId());
     }
 
+    public Page<CommentInfoResponseDto> findByProductId(CommentsRequest commentsRequest, Pageable pageable) {
+        return  commentRepository.findByProductId(commentsRequest, pageable);
+    }
 
+    @Transactional
+    public Long updateByCommentId(CommentUpdateRequestsDto updateRequestsDto) {
+        Comment entity = commentRepository.findById(updateRequestsDto.getCommentId()).orElseThrow(
+                () -> new CustomException(ErrorCode.INTERNAL_SERVER_ERROR)
+        );
+        return  commentRepository.updateByCommentId(updateRequestsDto);
+    }
 }

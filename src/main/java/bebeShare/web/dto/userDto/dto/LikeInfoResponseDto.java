@@ -1,4 +1,4 @@
-package bebeShare.web.dto.userDto;
+package bebeShare.web.dto.userDto.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
@@ -8,19 +8,21 @@ import java.time.LocalDateTime;
 
 @ToString
 @Getter
-public class GiveInfoResponseDto {
+public class LikeInfoResponseDto {
 
     private Long productId;
     private String productName;
     private String productImage1;
     private LocalDateTime insertDt;
 
+
     @QueryProjection //의존적이게 되 단점
-    public GiveInfoResponseDto(Long productId, String productName, String productImage1, LocalDateTime insertDt) {
+    public LikeInfoResponseDto(Long productId, String productName, String productImage1, LocalDateTime insertDt) {
         this.productId = productId;
         this.productName = productName;
         this.productImage1 = productImage1;
         this.insertDt = insertDt;
+
     }
 
 }

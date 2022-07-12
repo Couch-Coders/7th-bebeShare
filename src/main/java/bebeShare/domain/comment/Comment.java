@@ -50,15 +50,13 @@ public class Comment extends BaseEntity {
         this.commentStatus = commentStatus;
     }
 
-    public void update(Long id, CommentUpdateRequestsDto c) {
-        this.id = id;
-        this.product = c.getProduct();
-        this.user = c.getUser();
+    public void update(CommentUpdateRequestsDto c) {
+        this.id = c.getCommentId();
         this.commentContent = c.getCommentContent();
         this.deleteYn = c.getDeleteYn();
         this.commentStatus = c.getCommentStatus();
     }
-    public void delete(CommentDeleteRequestDto c){
-        this.deleteYn = c.getDeleteYn();
+    public void delete(){
+        this.deleteYn = "Y";
     }
 }

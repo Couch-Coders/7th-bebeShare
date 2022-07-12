@@ -9,11 +9,11 @@ import static bebeShare.domain.common.ResponeMsgEnum.RESPONES_SUCCESS;
 @Getter
 public class CommentDeleteResponseDto extends ResEntity {
 
-    private Long productId;
+    private Long commentId;
 
-    public CommentDeleteResponseDto(Long productId) {
+    public CommentDeleteResponseDto(Long commentId) {
         this.setResultCode(RESPONES_SUCCESS.getValue());
         this.setResultMsg(COMMENT_DELETE_OK);
-        this.productId = productId;
+        this.commentId = commentId;
     }
 }

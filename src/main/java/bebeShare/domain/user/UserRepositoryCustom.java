@@ -1,18 +1,28 @@
 package bebeShare.domain.user;
 
-import bebeShare.web.dto.userDto.*;
+
+import bebeShare.web.dto.userDto.dto.GiveInfoResponseDto;
+import bebeShare.web.dto.userDto.dto.LikeInfoResponseDto;
+import bebeShare.web.dto.userDto.dto.MemberCommentResponseDto;
+import bebeShare.web.dto.userDto.dto.ShareInfoResponseDto;
+import bebeShare.web.dto.userDto.req.CommentRequest;
+import bebeShare.web.dto.userDto.req.GiveRequest;
+import bebeShare.web.dto.userDto.req.LikeRequest;
+import bebeShare.web.dto.userDto.req.ShareRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface UserRepositoryCustom {
 
-    List<ShareInfoResponseDto> shareInfo(UserRequest userRequest);
+    Page<ShareInfoResponseDto> shareInfo(ShareRequest shareRequest, Pageable pageable);
 
-    List<GiveInfoResponseDto> giveInfo(UserRequest conduserRequestition);
+    Page<GiveInfoResponseDto> giveInfo(GiveRequest giveRequest, Pageable pageable);
 
-    List<LikeInfoResponseDto> likeInfo(UserRequest userRequest );
+    Page<LikeInfoResponseDto> likeInfo(LikeRequest likeRequest, Pageable pageable);
 
-    List<MemberCommentResponseDto> comments(UserRequest condition );
+    Page<MemberCommentResponseDto> comments(CommentRequest commentRequest, Pageable pageable);
 
 
 }

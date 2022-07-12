@@ -7,28 +7,11 @@ import bebeShare.domain.user.User;
 import lombok.*;
 
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
 public class CommentUpdateRequestsDto {
-    private User user;
-    private Product product;
-    private Long productId;
-    private Long memberId;
+    private Long commentId;
     private String commentContent;
     private String deleteYn;
     private String commentStatus;
-
-    @Builder
-    public Comment toEntity(){
-        return Comment.builder()
-                .user(user)
-                .product(product)
-                .commentContent(commentContent)
-                .deleteYn("N")
-                .commentStatus("100")
-                .build();
-    }
 
 }

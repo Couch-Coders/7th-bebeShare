@@ -1,0 +1,379 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <th:block layout:fragment="css">
+        <style th:inline="css">
+            .float {
+                position: fixed;
+                width: 60px;
+                height: 60px;
+                bottom: 40px;
+                right: 40px;
+                background-color: blue;
+                color: black;
+                border-radius: 50px;
+                text-align: center;
+                box-shadow: 2px 2px 3px #999;
+            }
+
+            .my-float {
+                margin-top: 22px;
+            }
+
+            .card-img-top {
+                height: 200px;
+                width: 100%;
+            }
+
+            sub {
+                font-size: 17px;
+                top: 1px;
+            }
+        </style>
+    </th:block>
+
+    <title>배배쉐어</title>
+
+    <script>
+
+
+        var gubunUrl = {
+            S: '/api/v1/members/shareInfo',
+            G: '/api/v1/members/giveInfo',
+            L: '/api/v1/members/likeInfo'
+        }
+
+        $(function () {
+
+            selShareInfo();
+
+            $('.nav-link').click(function () {
+                    $('.nav-link').removeClass('active');
+                    $(this).addClass('active');
+                }
+            );
+        });
+
+
+        function selShareInfo() {
+            $('#proudcts').empty();
+            $('#product').removeClass("d-none");
+            $('#comment').addClass("d-none");
+
+
+            let pHtml = '';
+            var data = {
+                productStatus: 'C',
+
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: '/api/v1/members/shareInfo',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data)
+            }).done(function (data) {
+                console.log("기부:{}", data);
+                const products = data.content;
+                for (var i = 0; i < products.length; i++) {
+                    pHtml += renderHtmlProduct(products[i])
+                }
+
+                $('#products').html(pHtml);
+            }).fail(function (error) {
+                alert(JSON.stringify(error));
+            });
+        }
+
+        function selGiveInfo() {
+            $('#proudcts').empty();
+            $('#product').removeClass("d-none");
+            $('#comment').addClass("d-none");
+
+            let pHtml = '';
+            var data = {
+                productStatus: 'C',
+
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: '/api/v1/members/giveInfo',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data)
+            }).done(function (data) {
+                console.log("나눔:{}", data);
+
+                const products = data.content;
+
+                for (var i = 0; i < products.length; i++) {
+
+                    pHtml += renderHtmlProduct(products[i])
+
+                }
+
+                $('#products').html(pHtml);
+            }).fail(function (error) {
+                alert(JSON.stringify(error));
+            });
+        }
+
+        function selLikeInfo() {
+            $('#proudcts').empty();
+            $('#product').removeClass("d-none");
+            $('#comment').addClass("d-none");
+
+            var data = {};
+            let pHtml = '';
+
+            $.ajax({
+                type: 'POST',
+                url: '/api/v1/members/likeInfo',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data)
+            }).done(function (data) {
+                console.log("찜:{}", data);
+
+                const products = data.content;
+
+
+                for (var i = 0; i < products.length; i++) {
+                    pHtml += renderHtmlProduct(products[i])
+                }
+
+                $('#products').html(pHtml);
+            }).fail(function (error) {
+                alert(JSON.stringify(error));
+            });
+        }
+
+        function selComment() {
+            $('#proudcts').empty();
+            $('#comment').removeClass("d-none");
+            $('#product').addClass("d-none");
+
+            var data = {};
+            let pHtml = '';
+
+            $.ajax({
+                type: 'POST',
+                url: '/api/v1/members/comments',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data)
+            }).done(function (data) {
+                console.log("코멘트:{}", data);
+
+                const comments = data.content;
+
+
+                for (var i = 0; i < comments.length; i++) {
+                    pHtml += renderHtmlComeent(comments[i])
+                }
+
+                $('#comments').html(pHtml);
+            }).fail(function (error) {
+                alert(JSON.stringify(error));
+            });
+        }
+
+
+        function addProducts() {
+
+            let gubun = $('.nav .nav-item .active').attr("id");
+            const p_trans = {};
+            let pHtml = '';
+            p_trans.page = $('.col-md-4').length + 1;
+            p_trans.size = 9;
+
+            $.ajax({
+                dataType: 'json',
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                url: gubunUrl[gubun],
+                data: JSON.stringify(p_trans),
+                success: function (data) {
+                    console.log("상품리스트:{}", data);
+                    const products = data.content;
+                    for (var i = 0; i < products.length; i++) {
+                        pHtml += renderHtmlProduct(products[i])
+                    }
+                    $('#products').append(pHtml);
+                },
+                error: function (e) {
+                    console.log(e.message);
+                }
+            });
+        }
+
+
+        function addComment() {
+
+            const p_trans = {};
+            let pHtml = '';
+            p_trans.page = $('.col-md-4').length + 1;
+            p_trans.size = 9;
+
+            $.ajax({
+                dataType: 'json',
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                url: '/api/v1/members/comments',
+                data: JSON.stringify(p_trans),
+                success: function (data) {
+                    console.log("댓글추가리스트:{}", data);
+                    const comments = data.content;
+                    for (var i = 0; i < comments.length; i++) {
+                        pHtml += renderHtmlComeent(comments[i])
+                    }
+                    $('#comments').append(pHtml);
+                },
+                error: function (e) {
+                    console.log(e.message);
+                }
+            });
+        }
+
+
+        function renderHtmlProduct(products) {
+
+            let pHtml = '';
+
+            pHtml += '<div class="col-md-4">';
+            pHtml += '  <div class="card">';
+            pHtml += '      <img class="card-img-top" src="' + products.productImage1 + '" alt="Card image cap" >';
+            pHtml += '          <div class="card-body">';
+            pHtml += '              <h5 class="card-title">' + products.productName + '</h5>';
+            pHtml += '              <div class="d-flex justify-content-between ">';
+            pHtml += '                  <p class="card-text"><small class="text-muted">' + products.insertDt + '</small>';
+            pHtml += '              </div>';
+            pHtml += '          </div>';
+            pHtml += '   </div>';
+            pHtml += '</div>';
+
+            return pHtml;
+        }
+
+        function renderHtmlComeent(commnet) {
+
+            let pHtml = '';
+
+            pHtml += '<div class="card">';
+            pHtml += '    <div class="card-body">';
+            pHtml += '        <div class="row">';
+            pHtml += '            <div class="col-md-2">';
+            pHtml += '                <img src="' + commnet.productImage + '" class="rounded-circle img-fluid" alt="">';
+            pHtml += '            </div>';
+            pHtml += '            <div class="col-md-10">';
+            pHtml += '                <div class="row">';
+            pHtml += '                    <div class="col-md-10 justify-content-center">';
+            pHtml += '                        <p>' + commnet.commentContent + '</p>';
+            pHtml += '                    </div>';
+            pHtml += '                    <div class="col-md-2 justify-content-center">';
+            pHtml += '                        <span style="font-size: 12px;">' + commnet.insertDt + '</span>';
+            pHtml += '                    </div>';
+            pHtml += '              </div>';
+            pHtml += '            </div>';
+            pHtml += '        </div>';
+            pHtml += '    </div>';
+            pHtml += '</div>';
+
+            return pHtml;
+        }
+
+
+    </script>
+</head>
+
+<th:block layout:fragment="content">
+
+    <!-- main -->
+    <div class="container pl-5 pr-5">
+        <!-- user profile -->
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-2">
+                <!--          <h3 th:text="${user.name}">>이름</h3>-->
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-3">
+                <p class="border border-primary rounded-pill p-2 text-primary w-100">
+                    나눔한 횟수: <sub th:text="${user.shareCnt +'회'}"></sub>
+                </p>
+                <p class="border border-primary rounded-pill p-2 text-primary w-100">
+                    나눔받은 횟수: <sub th:text="${user.giveCnt+'회'}"></sub>
+                </p>
+                <p class="border border-primary rounded-pill p-2 text-primary w-100">
+                    남은나눔 받기 횟수: <sub th:text="${user.shareChanceCnt+'회'}"></sub>
+                </p>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+        <!-- user profile -->
+
+        <!-- 카테고리 선택 탭 나눔한 내역, 나눔받은 내역, 찜목록, 댓글-->
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="javascript:selShareInfo();" id="S">나눔한 내역</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:selGiveInfo();" id="G">나눔받은 내역</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:selLikeInfo();" id="L">찜목록</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:selComment();">댓글</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+        <!-- 카드 리스트 -->
+        <div name="card-list" id="product">
+            <div class="row d-flex justify-content-center " style="margin-top: 20px;">
+                <div class="col-md-12">
+                    <div class="row" id="products">
+
+                    </div>
+                </div>
+            </div>
+            <!-- 카드 리스트 -->
+            <div class="row d-flex justify-content-center">
+                <button type="button" class="btn btn-link" onclick="addProducts()">더보기</button>
+            </div>
+
+        </div>
+        <!-- 댓글 리스트 d-none를 해지해 볼 수 있다-->
+        <div class="row justify-content-center" id="comment">
+            <div class="col-md-12">
+                <!-- 댓글 (작성자)-->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row" id="comments">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-center">
+                <button type="button" class="btn btn-link" onclick="addComment()">더보기</button>
+            </div>
+        </div>
+    </div>
+</th:block>
+</html>

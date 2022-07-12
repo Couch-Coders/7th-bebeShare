@@ -1,5 +1,6 @@
 
-
+server:
+  port: ${PORT:8080}
 
 
 spring:
@@ -17,6 +18,15 @@ logging:
         SQL: DEBUG
         type: debug
 
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: false
+  freemarker.cache: false
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
 
 
 

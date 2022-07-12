@@ -1,10 +1,10 @@
 package bebeShare.config.redis;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.data.redis.LettuceClientConfigurationBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.session.data.redis.config.ConfigureRedisAction;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.session.web.context.AbstractHttpSessionApplicationInitializer;
 
@@ -14,16 +14,19 @@ import org.springframework.session.web.context.AbstractHttpSessionApplicationIni
 @RequiredArgsConstructor
 public class RedisConfig extends AbstractHttpSessionApplicationInitializer {
 
-    @Value("${spring.redis.host}")
-    private String host;
-
-    @Value("${spring.redis.port}")
-    private Integer port;
-
+    @Bean
+    public LettuceClientConfigurationBuilderCustomizer lettuceClientConfigurationBuilderCustomizer() {
+        return clientConfigurationBuilder -> {
+            if (clientConfigurationBuilder.build().isUseSsl()) {
+                clientConfigurationBuilder.useSsl().disablePeerVerification();
+            }
+        };
+    }
 
     @Bean
-    public LettuceConnectionFactory connectionFactory() {
-        return new LettuceConnectionFactory(host, port); // ip, port
+    public static ConfigureRedisAction configureRedisAction() {
+        return ConfigureRedisAction.NO_OP;
     }
+
 
 }

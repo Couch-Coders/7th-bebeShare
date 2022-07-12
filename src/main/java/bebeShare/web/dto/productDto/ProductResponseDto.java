@@ -2,7 +2,11 @@ package bebeShare.web.dto.productDto;
 
 import bebeShare.domain.product.Product;
 import bebeShare.domain.user.User;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
+
+import java.time.LocalDateTime;
+
 
 @Getter
 public class ProductResponseDto {
@@ -16,6 +20,7 @@ public class ProductResponseDto {
     private String productCategory;
     private String productStatus;
     private String deleteYn;
+    private Long shareId;
 
 
     public ProductResponseDto(Product entity) {
@@ -29,5 +34,6 @@ public class ProductResponseDto {
         this.productCategory = entity.getProductCategory();
         this.productStatus = entity.getProductStatus();
         this.deleteYn = entity.getDeleteYn();
+        this.shareId = entity.getShareId();
     }
 }

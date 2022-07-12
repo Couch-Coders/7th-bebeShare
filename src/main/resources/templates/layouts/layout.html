@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+
+<head>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
+    <!--    <link rel="stylesheet" th:href="@{/cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css}" type="text/css">-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+
+    <script src="https://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+
+    <script th:src="@{/js/app/bootstrap.bundle.min.js}" type="text/javascript"
+            integrity="sha384-JbyBXNAvjlfGeTO3sbxNWhGTwUZOWDEl5d7mCY11pjK5j4Aw/c49DPkf0D6vXGot"
+            crossorigin="anonymous"></script>
+    <script th:src="@{/js/app/jquery-3.3.1.js}" type="text/javascript"></script>
+    <script th:src="@{/js/app/common.js}" type="text/javascript"></script>
+
+
+</head>
+
+<header th:replace="fragments/header :: headerFragment"></header>
+
+<script th:inline="javascript">
+
+
+    $(function () {
+        var user = [[ ${session.user}]]; // 세션에 저장되 있는 값을 가져온다
+        initUser(user);
+        $('#logout').on('click', function (e) {
+            localStorage.clear();
+        });
+    });
+
+
+    function initUser(user) {
+        if (user) {
+            console.log("login")
+            $('#login').addClass("d-none");
+            $('#profile').removeClass("d-none");
+            $('#uPicture').attr('src', user.picture);
+            $('#userName').text(user.name + '님 안녕하세요!');
+            localStorage.setItem("username",user.name)
+            localStorage.setItem("userId",user.id)
+            localStorage.setItem("userPicture",user.picture)
+            return;
+        }
+
+        $('#profile').addClass("d-none");
+        $('#login').removeClass("d-none");
+    }
+</script>
+
+<th:block layout:fragment="content">
+    <body>
+
+
+    </body>
+</th:block>
+</html>

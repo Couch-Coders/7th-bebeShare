@@ -3,13 +3,18 @@ package bebeShare.web;
 
 import bebeShare.service.CategoryService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import bebeShare.web.dto.category.CategoryReqeustDto;
+import bebeShare.web.dto.codeDto.CodeResponseDto;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+@Slf4j
 @RestController
-@AllArgsConstructor
+@RequestMapping("/api/v1")
+@RequiredArgsConstructor
 public class CategoryApiController {
     private final CategoryService categoryService;
 
@@ -17,5 +22,16 @@ public class CategoryApiController {
     @GetMapping("/categories")
     public void lookupCategory(@RequestParam String code){
         categoryService.lookup(code);
+    }
+
+
+    @PostMapping("/categories")
+    public List<CodeResponseDto> findAllCategories(){
+
+        List<CodeResponseDto> byCode = categoryService.findAll();
+
+        log.debug("@@@@@ :" + byCode.toString());
+        return byCode;
+
     }
 }

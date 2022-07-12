@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "bebeshare-image",
+  "private_key_id": "ed1c006cd0cbe5095891fa824fc535c9db14968b",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCRRqywE82VCnu/\nheWiZQajC2DBhqyAiNvXqo2djzsZD+mjoIIXIxZZPrC7EjT0saoa+23T+449r2DM\nlHDQxqGK+PRCp0/BfaN8Dn+G87ykq+7b8NfQgB/kkQH/IAiuWaQNGxSPloJjZUBc\nllT0g9DK3hIWrCTclTehaymrlpXTatUXtAKq1jSe0M4rG4ksedgZ281yemDuogBN\nAi0lgLHuZu9THxfTtpYDmuDFf0x3kQaal2Qvb0tkZNKymUNjXXVpwGpv5gZQ3KNZ\nfLudgYM3I5vYZariNYLDM5IvqITjHQEN929l0EQLfEo4IYqWXcljc6CgXtPwImSj\nLkXiZW+lAgMBAAECggEAAI6gKZS0hyEhKbIzwpRXRYIiVDEAsbAqAlZkcKQ/T8X1\n2Wt2KZc4MLjC02orIH0bRTs4R/CBB8+HtCvQOvISuzEKjsQ21BZ37V6I3VWgoD5g\njiC1qIEKnkUdbYML8CSRMn5WF9mLP80ARYVLZ3H8olUzsI6RyElyNdZECfpr3Kxc\nu1YMLgXnV3neuec6eqDt/v9QNN8Q76dvdEagINI6Ixxnq+IxY1MBq4loUFKRYhDu\nThd65IEp8eZHftMU08R1Pg3mbR8Yj1cyGYRKYppzMDmHO19y+sS+fju4GgI0kxGR\nAgUDiiKHPIO/t7lHE6x4xzLc5oy9pnI0xlxOZnmxSQKBgQDG0yBGDmBEtg8cLA/o\nybg1nUEqGM1ALqkrS6QGqCE2ybIiAI2KlFlNJJyMbJPKqU0Lv8QTRhy5gR+q+jyo\n53tYjmsDqdgI8H0yCwRkaGGVD6nhRUNeGUGFB/uq1ogRqvIt9wHS0jtzdDYMD1gl\ntgsADCZQ+h1WjiV14TC4XANkmwKBgQC7DXWsPf0I/JKim/N4d7rjEgSzdZQzB5KG\nh7zOGTECRL+MhPTBWMQqcJHVpBMxCFf5IlgV2aWidbcsBzj4AbREZg2cvFsL3uyT\nNk5W+eBP7bSuHPcpQL8ZQXP/ZFucs5wlrQGauje/O0ddQOXHDD30dN3YvFm7UzID\nOx4NEX4gvwKBgHbGg342cl454Lb0v6BSeWBWDCrI3DzeYyNBMcDkSctAHNFhQS0r\nSFnkaD0fU/76utMtAUZ+WQSc1b0/dmN0veP+WIG8whk9CZ2OpVYSYVE6JUM1LHSX\nY+PEDB1XwbvEQp8g847tFqT3JJ55wC/vG40wtOclM8eUbV6JY6CPH1vHAoGAYSwm\n22oAj7CWhL87hnO8tMXhh1EnwjLG3fiaDv9rRGBumhNgCymQDvQX7sKj7a8F9Ljw\nxbkhoPpCRC8kW0KXYYkavTfknJAcmoV1wR1ieGNmn6UQiW/HVtl35089gHSWQ8RS\ntwzSdRfYhQt30yX68YnczgFbJEOeEaueeu+BdIUCgYEAqOkw+vnNSWXTSQb+Uzrl\nTEn8Af0Dc3tavt8FZG05HmGclU/LVFVMZdsSDd1pUxHPgBEyp1Q2NTq4T9t8vr8K\njHDe5sibUEHlT0E0ZBe0FKcDm6M/tFBzzc01fxHJ+6OZgC+bJgXVC1zcnSrEHhiU\nGlJcjN1SRAc7NNFkwxApTSk=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-n7s06@bebeshare-image.iam.gserviceaccount.com",
+  "client_id": "116660085712625798330",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-n7s06%40bebeshare-image.iam.gserviceaccount.com"
+}

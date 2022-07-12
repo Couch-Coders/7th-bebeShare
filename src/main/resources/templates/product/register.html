@@ -1,0 +1,179 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html"
+      layout:decorate="~{layouts/layout}">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <th:block layout:fragment="css">
+        <style th:inline="css">
+            .form-check-inline{
+                width: auto;
+                margin : .5rem;
+            }
+        </style>
+    </th:block>
+
+    <title>배배쉐어</title>
+
+    <th:block layout:fragment="script">
+        <script type="text/javascript" th:inline="javascript">
+
+            $(function () {
+
+                const p_trans = {};
+                let cHtml = '';
+                p_trans.code = "100";
+
+                $.ajax({
+                    dataType: 'json',
+                    type: "POST",
+                    contentType: "application/json;charset=utf-8",
+                    url: '/api/v1/categories',
+                    data: JSON.stringify(p_trans),
+                    success: function (data) {
+                        const categories = data;
+
+                        for (var i = 0; i < categories.length; i++) {
+                            cHtml += '<input type="radio" class="form-check-inline" name="category" value="' + categories[i].code + '">'
+                            cHtml += categories[i].codeName;
+                        }
+
+                        $('#categories').html(cHtml)
+
+                    },
+                    error: function (e) {
+                        console.log(e.message);
+                    }
+                });
+
+
+            });
+
+            function uploadImage(idx) {
+                var result;
+                $.ajax({
+                    url: '/upload',
+                    type: "POST",
+                    enctype: 'multipart/form-data',
+                    data: new FormData($("#form-images" + idx)[0]),
+                    contentType: false,
+                    processData: false,
+                    async: false,
+                    success: function (imagePath) {
+                        result = imagePath;
+                    },
+                    error: function () {
+                        alert("값을 가져오지 못했습니다.");
+                    }
+                });
+                return result;
+            }
+
+
+
+
+            /* 상품 정보 DB 저장 */
+            async function createProduct() {
+
+                var user = [[ ${user}]];
+                var title = document.querySelector('#form-title').value;
+                var contents = document.querySelector('#form-contents').value;
+                var category = $("input:radio[name='category']:checked").val();
+                var productImage1 = uploadImage("1");
+                var productImage2 = uploadImage("2");
+                var productImage3 = uploadImage("3");
+
+
+
+                data = {
+                    'user': user,
+                    'productName': title,
+                    'productContent': contents,
+                    'productImage1': productImage1,
+                    'productImage2': productImage2,
+                    'productImage3': productImage3,
+                    'productCategory': category,
+                    'productStatus': "N",
+                    'deleteYn': "N"
+                };
+                $.ajax({
+                    url: '/api/v1/product',
+                    type: "POST",
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    async: true,
+                    success: function () {
+                        window.location.replace("/");
+                    },
+                    error: function (request, error) {
+                        alert("값을 가져오지 못했습니다.");
+                        // alert("code : " + request.status + " \n "
+                        //     + "message : " + request.responseText + "\n"
+                        //     + "error: " + error)
+                    }
+                })
+            }
+        </script>
+    </th:block>
+</head>
+
+<!-- navbar -->
+<th:block layout:fragment="content">
+
+    <!-- main -->
+    <div class="container p-5">
+        <!-- post upload form title & contents & multiple images & image preview -->
+        <div class="row justify-content-center d-flex">
+            <div class="col-md-10">
+                <!-- form title input -->
+                <div class="form-group">
+                    <div class="mb-4">
+                        <label for="form-title">제목</label>
+                        <input type="text" class="form-control" id="form-title" name="title" placeholder="제목을 입력해주세요." required>
+                    </div>
+
+                    <!-- select category use radio button -->
+                    <div class="form-group mb-4">
+                        <div class="form-check-inline" style="display:inline-block"  id="categories" name="categories" required>
+
+                        </div>
+                        <!-- tags -->
+                    </div>
+                    <!-- contents -->
+                    <div class="form-group mb-4">
+                        <label for="form-contents">내용</label>
+                        <textarea class="form-control" id="form-contents" rows="15" required></textarea>
+                    </div>
+                    <!-- images -->
+                    <div class="form-group mb-4">
+                        <label>이미지</label>
+                        <form class="image-group" id="form-images1" method="post" enctype="multipart/form-data" accept=“image/*” required>
+                            <input id="image1" type="file" name="image"/>
+                        </form>
+                        <form class="image-group" id="form-images2" method="post" enctype="multipart/form-data" accept=“image/*”>
+                            <input id="image2" type="file" name="image"/>
+                        </form>
+                        <form class="image-group" id="form-images3" method="post" enctype="multipart/form-data" accept=“image/*”>
+                            <input id="image3" type="file" name="image"/>
+                        </form>
+                        <!-- images -->
+                    </div>
+                    <!-- 등록 취소 버튼 in center -->
+                    <div class="form-group d-flex justify-content-between">
+                        <button type="button" class="btn btn-secondary" id="post-cancel" onclick="location.href='/'">
+                            취소
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="post-submit"
+                                th:onclick="'javascript:createProduct()'">등록
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+</html>
+

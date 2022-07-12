@@ -83,6 +83,31 @@ public class ProductRepositoryTest {
     @Test
     public void delete() {
 
+        User testUser = userRepository.save(User.builder()
+                .name("test1")
+                .picture("/fake/path")
+                .email("test1@naver.com")
+                .role(Role.USER)
+                .build()
+        );
+
+        // 1. 상품 게시글 파라미터 생성
+        Product product = Product.builder()
+                .user(testUser)
+                .productName("product0")
+                .productCategory("100")
+                .productContent("content0")
+                .productImage1("1")
+                .productImage2("2")
+                .productImage3("3")
+                .productStatus("S")
+                .deleteYn("N")
+                .build();
+
+        // 2. 게시글 저장
+        productRepository.save(product);
+
+
         // 1. 게시글 조회
         Product entity = productRepository.findById((long) 1).get();
 
